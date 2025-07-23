@@ -1,5 +1,4 @@
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
---
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
@@ -101,7 +100,6 @@ vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower win
 vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
 
 --open explorer
-vim.keymap.set("n", "<C-b>", "<Cmd> Neotree toggle <CR>", { desc = "Open explorer" })
 vim.keymap.set("n", "<leader>pv", ":Explore<CR>", { desc = "Open explorer" })
 
 --close shortcut
@@ -577,11 +575,22 @@ require("lazy").setup({
 			--  - settings (table): Override the default settings passed when initializing the server.
 			--        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
 			local servers = {
-				clangd = {},
+				clangd = {
+					init_options = {
+						completion = {
+							placeholder = false,
+						},
+					},
+				},
+
+				glsl_analyzer = {},
+
 				arduino_language_server = {},
-				-- gopls = {},
-				-- pyright = {},
-				-- rust_analyzer = {},
+
+				pyright = {},
+
+				rust_analyzer = {},
+
 				-- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
 				--
 				-- Some languages (like typescript) have entire language plugins that can be useful:
@@ -713,7 +722,11 @@ require("lazy").setup({
 					--   end,
 					-- },
 				},
-				opts = {},
+				opts = {
+					history = true,
+					region_check_events = "InsertEnter",
+					delete_check_events = "TextChanged,InsertLeave",
+				},
 			},
 			"folke/lazydev.nvim",
 		},
@@ -757,7 +770,7 @@ require("lazy").setup({
 			completion = {
 				-- By default, you may press `<c-space>` to show the documentation.
 				-- Optionally, set `auto_show = true` to show the documentation after a delay.
-				documentation = { auto_show = false, auto_show_delay_ms = 500 },
+				documentation = { auto_show = true, auto_show_delay_ms = 500 },
 			},
 
 			sources = {
@@ -788,7 +801,8 @@ require("lazy").setup({
 		-- change the command in the config to whatever the name of that colorscheme is.
 		--
 		-- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-		"bluz71/vim-moonfly-colors",
+		-- theme
+		"navarasu/onedark.nvim",
 		priority = 1000, -- Make sure to load this before all the other start plugins.
 		name = "moonfly",
 		lazy = false,
@@ -894,7 +908,6 @@ require("lazy").setup({
 	--require("kickstart.plugins.indent_line"),
 	require("kickstart.plugins.lint"),
 	require("kickstart.plugins.autopairs"),
-	require("kickstart.plugins.neo-tree"),
 	require("kickstart.plugins.gitsigns"), -- adds gitsigns recommend keymaps
 
 	-- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
