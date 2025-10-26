@@ -31,10 +31,13 @@ vim.o.breakindent = true
 vim.o.expandtab = true
 vim.o.smartindent = true
 vim.o.tabstop = 2
-vim.o.shiftwidth = 2
+vim.o.shiftwidth = 0
 
 -- Save undo history
 vim.o.undofile = true
+
+-- Set different configs for different languages
+vim.cmd("filetype plugin on")
 
 -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
 vim.o.ignorecase = true
@@ -101,7 +104,6 @@ vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower win
 vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
 
 --open explorer
-vim.keymap.set("n", "<C-b>", "<Cmd> Neotree toggle <CR>", { desc = "Open explorer" })
 vim.keymap.set("n", "<leader>pv", ":Explore<CR>", { desc = "Open explorer" })
 
 --close shortcut
@@ -577,20 +579,13 @@ require("lazy").setup({
 			--  - settings (table): Override the default settings passed when initializing the server.
 			--        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
 			local servers = {
+				glsl_analyzer = {},
+				jdtls = {},
+				autotools_ls = {},
 				clangd = {},
 				arduino_language_server = {},
-				-- gopls = {},
-				-- pyright = {},
-				-- rust_analyzer = {},
-				-- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
-				--
-				-- Some languages (like typescript) have entire language plugins that can be useful:
-				--    https://github.com/pmizio/typescript-tools.nvim
-				--
-				-- But for many setups, the LSP (`ts_ls`) will work just fine
-				-- ts_ls = {},
-				--
-
+				rust_analyzer = {},
+				pyright = {},
 				lua_ls = {
 					-- cmd = { ... },
 					-- filetypes = { ... },
@@ -757,7 +752,7 @@ require("lazy").setup({
 			completion = {
 				-- By default, you may press `<c-space>` to show the documentation.
 				-- Optionally, set `auto_show = true` to show the documentation after a delay.
-				documentation = { auto_show = false, auto_show_delay_ms = 500 },
+				documentation = { auto_show = true, auto_show_delay_ms = 500 },
 			},
 
 			sources = {
@@ -894,7 +889,6 @@ require("lazy").setup({
 	--require("kickstart.plugins.indent_line"),
 	require("kickstart.plugins.lint"),
 	require("kickstart.plugins.autopairs"),
-	require("kickstart.plugins.neo-tree"),
 	require("kickstart.plugins.gitsigns"), -- adds gitsigns recommend keymaps
 
 	-- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
